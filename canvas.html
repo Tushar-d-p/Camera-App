@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            box-sizing: border-box;
+        }
+
+        body{
+            margin:0;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+
+    <canvas></canvas>
+    <script> 
+        let canvas = document.querySelector("canvas");//selects the canvas tag
+        canvas.height = window.innerHeight;
+        canvas.width = window.innerWidth;
+
+        // let ctx = canvas.getContext("2d");
+        // ctx.beginPath();//to start
+        // ctx.moveTo(100,200);//move cursor to this position and start from here
+        // ctx.lineTo(300,400);//till here
+        // ctx.strokeStyle = "blue";
+        // ctx.lineWidth = 20;
+        // ctx.stroke();
+        // // for new line
+        // ctx.beginPath();
+        // ctx.moveTo(300,400);
+        // ctx.lineTo(600,200);
+        // ctx.stokeStyle = "red";
+        // ctx.stroke();
+
+
+        // ctx.strokeStyle  = "blue";
+        // ctx.strokeRect(100,200,300,400);//x,y,width,height
+
+        // ctx.fillStyle = "blue";
+        // ctx.fillRect(100,200,300,400);
+
+        let img = document.createElement("img");// ek element tag create karo
+        img.src = "babu.jpg";//fir use par ye store kardo
+
+        let ctx = canvas.getContext("2d");
+
+        // img tag par event laga do load ka
+        // load event ye kehta hai ki jab img load ho jaye tab function chalana dene
+        img.addEventListener("load", function(){
+            ctx.drawImage(img,0,0);// konsa img load karna hai, x point kya hai, y point kya hai
+        });
+    </script>
+    
+</body>
+</html>

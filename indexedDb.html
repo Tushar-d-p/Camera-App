@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" id="name" placeholder="Db name" value="DB">
+    <input type="text" id="version" placeholder="1.0" value="1">
+    <button id="create">Create</button>
+
+    <hr/>
+
+    <input type="text" id="note" placeholder="your note"/>
+    <button id="add">Add Note</button>
+
+    <script>
+        let name = document.querySelector("#name");
+        let version = document.querySelectetor("#version");
+        let btn = document.querySelector("button#create");
+
+        let note = document.querySelector("#note");
+        let addBtn = docuemnt.querySelectetor("#add");
+
+        let db,v,dbAccess;// dbAccess ek global variable hai
+
+        // jab hum kuch note add karna chate hai tab chalta hai
+        addBtn.addEventListener("click",function(){
+            let val = note.value;
+
+            //dbAccess pehle success event se milega tab yaha aayega. Toh agar dbAcess nahi hai to alert kardo
+            if(!dbAccess)
+            {
+                alert("Please open a database to add note");
+                return;
+            }
+            
+            // ObjectStore mei value store karne ke liye hume transaction shuru karna padta hai
+            // to hume cs name ke ObjectStore/table ke sath readwrite ka transaction shuru karna hai
+            let tx = dbAccess.transcation("cs","readwrite");
+            let csObjectStore = tx.objectStore("cs");//tx name ke transaction se object nikalna hai 
+
+            // cs name ke object ka data banao
+            let data = {
+                nId: Date.now(),
+                noteValue: val,
+            };
+            csObjectStore.add(data);// cs name ke object me store kardo
+        });
+
+        btn.addEventListener("click",function(){
+            db = name.value;// input tag DB name ki value db mei store kardi aur input tag version ki value v mei store kardi
+            v = version.value;
+
+            let request = indexedDB.open(db,v);//indexedDB ek object hey jo browser hume deta hai uss object ka open method hum call karte
+            //hai ki iss database name se aur iss version ka Database open karo aur agar nahi hey to Create karo
+
+            // success event tab chalta hey jab database open hota hai ya naya create karte hai
+            request.addEventListener("success",function(){
+                alert("db was created");
+                dbAccess = request.result;
+                viewNotes();// when we get database access we call vieNotes function
+            });
+
+            // upgrade event tab chalte hai jab hum Database create karte hai ya new version update karte hai
+            // jab hum Create karte hai tab Upgrade event ke baad success event hota hai
+            request.addEventListener("upgradeneeded",function(){
+                alert("upgrade occured");
+                let db = request.result;// request.result hume database ka access milta hai
+                db.createObjectStore("cs",{keypath:"nId"});// db name ke Database mei createObjectStore se cs name ka object banao aur keypath ek Unique ID hai uss object ko identify karne ki 
+            });
+
+            // error event tab chalta jab hum downgraded version create ya open karne ki koshish karte hai
+            request.addEventListener("error",function(){
+                alert("some error occured");
+            });
+        });
+
+        function viewNotes(){
+            let tx = dbAccess.transaction("cs","readonly");// we want to start transaction on cs object and that transc is readonly
+            let csobjectStore = tx.objectStore("cs");// get that object
+            let req = csObjectStore.openCursor();// we ask to openCursor can we get cursor for objectStore
+
+            // if request success then add eventListener to it
+            req.addEventListener("success",function(){
+                let cursor = req.result;// give me the cursor
+                if(cursor)
+                {
+                    console.log(cursor.value);
+                    cursor.continue(); //by writing continue again we reach to top of function and req.addEventListener keep runnning again till all objects reading gets completed
+                }
+            });
+        }
+    </script>
+</body>
+</html>

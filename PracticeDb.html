@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <input type="text" id="name" placeholder="Db name" value="Db">
+    <input type="text" id="version" placeholder="1.0" value="1">
+    <button id="create">Create</button>
+
+    <hr/>
+
+    <input type="text " id="note" placeholder="your note">
+    <button id="add">Add</button>
+
+    <script>
+        let name = document.querySelector("#name");
+        let version = document.querySelector("#version");
+        let btn = document.querySelector("button");
+
+        let note = document.querySelector("#note");
+        let addBtn = document.querySelector("#add");
+
+        let db,v;
+        let dbAccess;
+
+        addBtn.addEventListener("click",function(){
+            let val = note.value;
+            if(!dbAccess)
+            {
+                alert("Please open a database to add note");
+                return;
+            }
+
+            let tx = dbAccess.transaction("cs","readwrite");
+            let csObjectStore = tx.objectStore("cs");
+            let data = {
+                        id: 'js',
+                        price: 10,
+                        created: new Date()
+                // key: Date.now(),
+                // id: Date.now(),
+
+                // noteValue: val,
+            };
+            csObjectStore.add(data);
+        });
+
+        btn.addEventListener("click",function(){
+            db = name.value;
+            v = version.value;
+
+
+            let request = indexedDB.open(db,v);
+
+            //console.log(request);
+
+            request.addEventListener("success",function(){
+                alert("db was created");
+                dbAccess = request.result;
+            });
+
+            request.addEventListener("upgradeneeded",function(){
+                alert("upgrade occured");
+                 dbAccess = request.result;
+                dbAccess.createObjectStore("cs",{ keyPath: "id" });
+            });
+
+            request.addEventListener("error",function(){
+                alert("error occured");
+            });
+        });
+    </script>
+</body>
+</html>

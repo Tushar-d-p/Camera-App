@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- video tag ko video contnr ke anadar isliye dala ki jab hum zoomIn aur zoomOut karenge tab video contr ke andar
+    hi zoom hogi overflow nahi hogi isliye video-contr ka overflow hidden kar dia hai-->
+    <div class="video-container">
+        <!-- autoplay plays video or audio automatically with controls -->
+        <video autoplay controls></video>
+    </div>
+    <button class = "btn" id="record">
+        <div class="inner-record"></div>
+    </button>
+    <button class="btn" id="capture">
+        <div class="inner-capture"></div>
+    </button>
+    <div class="filter-container">
+        <div class="filters" style="background-color: #ff6b6b82"></div>
+        <div class="filters" style="background-color: #48dafb4b"></div>
+        <div class="filters" style="background-color: #ff9ff265"></div>
+        <div class="filters" style="background-color: #ff793f59"></div>
+        <div class="filters" style="background-color: #ffb04248"></div>
+        <div class="filters"></div>
+    </div>
+
+    <div class="zoom-in-out-container">
+        <div class="zoom-in">+</div>
+        <div class="zoom-out">-</div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
