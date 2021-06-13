@@ -39,14 +39,14 @@
             // ObjectStore mei value store karne ke liye hume transaction shuru karna padta hai
             // to hume cs name ke ObjectStore/table ke sath readwrite ka transaction shuru karna hai
             let tx = dbAccess.transcation("cs","readwrite");
-            let csObjectStore = tx.objectStore("cs");//tx name ke transaction se object nikalna hai 
+            let csObjectStore = tx.objectStore("cs");//tx name ke transaction se ObjectStore/table nikalna hai 
 
-            // cs name ke object ka data banao
+            // cs name ke object ka data banao means row banao
             let data = {
                 nId: Date.now(),
                 noteValue: val,
             };
-            csObjectStore.add(data);// cs name ke object me store kardo
+            csObjectStore.add(data);// cs name ke ObjectStore/table me store kardo
         });
 
         btn.addEventListener("click",function(){
@@ -77,10 +77,11 @@
             });
         });
 
+        // database mein se kuch read karna hai to yeh funcncc chalo
         function viewNotes(){
-            let tx = dbAccess.transaction("cs","readonly");// we want to start transaction on cs object and that transc is readonly
-            let csobjectStore = tx.objectStore("cs");// get that object
-            let req = csObjectStore.openCursor();// we ask to openCursor can we get cursor for objectStore
+            let tx = dbAccess.transaction("cs","readonly");// we want to start transaction on cs ObjectStore/table and that transc is readonly
+            let csobjectStore = tx.objectStore("cs");// get that ObjectStore/table
+            let req = csObjectStore.openCursor();// we ask(request) to openCursor can we get cursor for ObjectStore
 
             // if request success then add eventListener to it
             req.addEventListener("success",function(){

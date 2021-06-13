@@ -128,3 +128,12 @@ video{
     position: fixed;
     top: 0;
 }
+
+#gallery{
+    position: fixed;
+    width: 5rem;
+    height: 4rem;
+    bottom: 5rem;
+    right: 2rem;
+
+}

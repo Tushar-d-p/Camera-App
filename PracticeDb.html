@@ -37,13 +37,9 @@
             let tx = dbAccess.transaction("cs","readwrite");
             let csObjectStore = tx.objectStore("cs");
             let data = {
-                        id: 'js',
-                        price: 10,
-                        created: new Date()
-                // key: Date.now(),
-                // id: Date.now(),
+                nId: Date.now(),
 
-                // noteValue: val,
+                noteValue: val,
             };
             csObjectStore.add(data);
         });
@@ -60,18 +56,34 @@
             request.addEventListener("success",function(){
                 alert("db was created");
                 dbAccess = request.result;
+                viewNotes();
             });
 
             request.addEventListener("upgradeneeded",function(){
                 alert("upgrade occured");
-                 dbAccess = request.result;
-                dbAccess.createObjectStore("cs",{ keyPath: "id" });
+                let db = request.result;
+                db.createObjectStore("cs",{ keyPath: "nId" });
             });
 
             request.addEventListener("error",function(){
                 alert("error occured");
             });
         });
+
+        function viewNotes(){
+            let tx = dbAccess.transaction("cs","readonly");
+            let csObjectStore = tx.objectStore("cs");
+            let req = csObjectStore.openCursor();
+
+            req.addEventListener("success",function(){
+                let cursor = req.result;
+                if(cursor)
+                {
+                    console.log(cursor.value);
+                    cursor.continue();
+                }
+            })
+        }
     </script>
 </body>
 </html>

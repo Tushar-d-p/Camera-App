@@ -7,16 +7,26 @@
     <link rel="stylesheet" href="gallery.css">
 </head>
 <body>
-    <div class="container"></div>
-    <!-- <div class="media-card">
-        <div class="media-container"></div>
-        <div class="action-container">
-            <button class="media-download">Download</button>
-            <button class="media-delete">Delete</button>
-        </div>
-    </div> -->
+    <div class="container">
+        <!-- <div class="media-card">
+            <div class="media-container"></div>
+            <div class="action-container">
+                <button class="media-download">Download</button>
+                <button class="media-delete">Delete</button>
+            </div>
+        </div> -->
+    <button id="back">Back</button>
+    </div>
+
     <script src="dbscript.js"></script>
     <script>
+
+        let btn = document.querySelector("#back");
+
+        btn.addEventListener("click",function(){
+            location.assign("index.html");
+        })
+        
         setTimeout(function(){
             viewMedia();
         },100);

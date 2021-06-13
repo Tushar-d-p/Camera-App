@@ -2,7 +2,7 @@
 let video = document.querySelector("video");// select the video tags
 let vidBtn = document.querySelector("button#record");//video ka button
 let capBtn = document.querySelector("button#capture");//image click ka button
-
+let galleryBtn = document.querySelector("#gallery");
 let filters = document.querySelectorAll(".filters");
 
 let zoomIn = document.querySelector(".zoom-in");
@@ -102,22 +102,25 @@ navigator.mediaDevices.getUserMedia(constraints)
     // MediaRecorder also has stop event which triggered when stop recording
     mediaRecorder.addEventListener("stop", function(){
         let blob = new Blob(chunks, {type: "video/mp4"});//Blob is like function of Blob class which takes two arguments chunks(what to make) and type in which you want
-
+        addMedia("video",blob);// Since the blob is stored on RAM and some pointerURL is pointing to that but once we refresh the webpage the pointer get lost and we 
+        // cannot access blob therefore we store blob directly into database 
+        
+        
         chunks = [];
 
         let url = URL.creatObjectURL(blob);
 
-        let a = document.createElement("a");
-        a.href = url;
-        a.download = "video.mp4";
-        a.click();
-        a.remove();
+        // let a = document.createElement("a");
+        // a.href = url;
+        // a.download = "video.mp4";
+        // a.click();
+        // a.remove();
     });
 
 });
 //capture buttob click kar ne par image draw hone chaiye aur image canvas pe draw hogi
 function capture(){
-    let c = document.createElement("canvas");//to phele canvas ban lo
+    let c = document.createElement("canvas");//to phele canvas bana lo
     c.width = video.videoWidth;//ab canvas ki height aur width utni hogi jitni width aur height se video play ho rahi hai
     c.height = video.videoHeight;
     let ctx = c.getContext("2d");
@@ -133,11 +136,12 @@ function capture(){
         ctx.fillStyle = filter;
         ctx.fillRect(0,0,c.width,c.height);
     }
-    let a = document.createElement("a");
-    a.download = "image.jpg";
-    a.href = c.toDataURL();// gives url to image so we can download 
-    a.click();
-    a.remove();
+    // let a = document.createElement("a"); // iss element ko dbscript.js me create karenge
+    // a.download = "image.jpg";
+    // a.href = c.toDataURL();// gives url to image so we can download 
+     addMedia("img",c.toDataURL());
+    // a.click();
+    // a.remove();
 }
 
 function applyFilter(filterColor)
@@ -153,3 +157,7 @@ function removeFilter(){
     if(filterDiv)
     filterDiv.remove();
 }
+
+galleryBtn.addEventListener("click",function(){
+    location.assign("gallery.html"); // Domain/path ->127.0.0.1:5500/gallery.html
+})
